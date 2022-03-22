@@ -14,7 +14,7 @@ WIDTH = 900
 HEIGHT = 500
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (0xFF, 0xFF, 0xFF)
-COLOR_GREEN = (0x39, 0xFF, 0x14)
+COLOR_PURPLE = (0x5C, 0x00, 0x7A)
 
 
 # Collecting our screen
@@ -23,14 +23,24 @@ surface = pygame.display.set_mode((WIDTH, HEIGHT))
 # Customizing our screen
 pygame.display.set_caption("Pong Game")
 
+# Load Center Image
+center_bg = pygame.image.load("resources/images/center.png")
+
 def background():
     # Background color
     surface.fill(COLOR_BLACK)
+
+    # Background center image
+    surface.blit(pygame.transform.scale(center_bg, (200, 200)), (WIDTH // 2 - 100, HEIGHT // 2 - 100))
+    pygame.draw.circle(surface, COLOR_BLACK, (WIDTH//2, HEIGHT//2), 150, width=50)
+
     # Middle line
-    pygame.draw.line(surface, COLOR_GREEN, (WIDTH//2, 0), (WIDTH//2, HEIGHT), 3)
-    pygame.draw.circle(surface, COLOR_GREEN, (WIDTH//2, HEIGHT//2), 20, width=20)
-    pygame.draw.circle(surface, COLOR_GREEN, (0, HEIGHT//2), 200, width=3)
-    pygame.draw.circle(surface, COLOR_GREEN, (WIDTH, HEIGHT // 2), 200, width=3)
+    pygame.draw.line(surface, COLOR_PURPLE, (WIDTH // 2, 0), (WIDTH // 2, HEIGHT), 3)
+    # Field marks
+    pygame.draw.circle(surface, COLOR_PURPLE, (WIDTH // 2, HEIGHT // 2), 7, width=7)
+    pygame.draw.circle(surface, COLOR_PURPLE, (0, HEIGHT // 2), 200, width=3)
+    pygame.draw.circle(surface, COLOR_PURPLE, (WIDTH, HEIGHT // 2), 200, width=3)
+
 
 def restart():
     background()
@@ -45,8 +55,8 @@ background()
 
 # Objects:
 ball = ball.Ball(surface, COLOR_WHITE, WIDTH//2, HEIGHT//2, 20)
-left_paddle = paddle.Paddle(surface, COLOR_GREEN, 10, HEIGHT//2-50, 20, 100)
-right_paddle = paddle.Paddle(surface, COLOR_GREEN, WIDTH - 20 - 10, HEIGHT//2-50, 20, 100)
+left_paddle = paddle.Paddle(surface, COLOR_PURPLE, 10, HEIGHT//2-50, 20, 100)
+right_paddle = paddle.Paddle(surface, COLOR_PURPLE, WIDTH - 20 - 10, HEIGHT//2-50, 20, 100)
 collision = collision.Collision()
 left_score = score.Score(surface, '0', WIDTH//4, 15)
 right_score = score.Score(surface, '0', WIDTH - WIDTH//4, 15)
