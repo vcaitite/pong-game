@@ -5,13 +5,13 @@ class Collision:
 
     def collision_ball_paddle1(self, ball, left_paddle):
         if ball.position[1] + ball.radius >= left_paddle.position[1] and ball.position[1] - ball.radius <= left_paddle.position[1] + left_paddle.position[3]:
-            if ball.position[0] - ball.radius <= left_paddle.position[0]:
+            if ball.position[0] - ball.radius == left_paddle.position[0] + left_paddle.position[2]:
                 return True
         return False
 
     def collision_ball_paddle2(self, ball, right_paddle):
         if ball.position[1] + ball.radius >= right_paddle.position[1] and ball.position[1] - ball.radius <= right_paddle.position[1] + right_paddle.position[3]:
-            if ball.position[0] + ball.radius >= right_paddle.position[0] + right_paddle.position[2]:
+            if ball.position[0] + ball.radius == right_paddle.position[0]:
                 return True
         return False
 
