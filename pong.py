@@ -4,7 +4,7 @@ import ball
 import paddle
 import collision
 import score
-import hole
+import portal
 
 
 # Initialize pygame
@@ -27,8 +27,8 @@ pygame.display.set_caption("Pong Game")
 
 # Images
 center_bg = pygame.image.load("resources/images/center.png")
-black_hole_image = pygame.transform.scale(pygame.image.load("resources/images/black_hole.png"), (100, 100))
-white_hole_image = pygame.transform.scale(pygame.image.load("resources/images/white_hole.png"), (100, 100))
+portal_image = pygame.transform.scale(pygame.image.load("resources/images/portal.png"), (100, 100))
+
 
 def background():
     # Background color
@@ -50,18 +50,18 @@ def background():
     pygame.draw.line(surface, COLOR_PURPLE, (0, 500), (900, 500), width=5)
     pygame.draw.line(surface, COLOR_PURPLE, (900, 0), (900, 500), width=3)
 
+
 def restart():
     background()
     right_score.restart()
     left_score.restart()
-    ball.restart()
+    ball.restart_center()
     left_paddle.restart()
     right_paddle.restart()
-    black_hole.restart()
-    white_hole.restart()
+    portal1.restart()
+    portal2.restart()
 
 background()
-
 
 # Objects:
 ball = ball.Ball(surface, COLOR_WHITE, WIDTH//2, HEIGHT//2, 20)
@@ -70,12 +70,17 @@ right_paddle = paddle.Paddle(surface, COLOR_PURPLE, WIDTH - 20 - 10, HEIGHT//2-5
 collision = collision.Collision()
 left_score = score.Score(surface, '0', WIDTH//4, HEIGHT + 15)
 right_score = score.Score(surface, '0', WIDTH - WIDTH//4, HEIGHT + 15)
-black_hole = hole.Hole(surface, black_hole_image, 680, 430)
-white_hole = hole.Hole(surface, white_hole_image, 220, 70)
+portal1 = portal.Portal(surface, portal_image, 680, 430)
+portal2 = portal.Portal(surface, portal_image, 220, 70)
 
 
 # Variables:
 playing = False
+
+# Timer:
+time_delay = 1
+timer_event = pygame.USEREVENT + 1
+
 
 # Main loop
 while True:
@@ -85,9 +90,14 @@ while True:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_b:
+                ball.restart_center()
+                left_paddle.restart()
+                right_paddle.restart()
+                portal1.restart()
+                portal2.restart()
                 ball.start_moving()
-                black_hole.start_moving(10)
-                white_hole.start_moving(10)
+                portal1.start_moving(5)
+                portal2.start_moving(5)
                 playing = True
 
             if event.key == pygame.K_w:
@@ -118,7 +128,6 @@ while True:
                 restart()
                 playing = False
 
-
         if event.type == pygame.KEYUP:
             left_paddle.state_v = 'stopped'
             right_paddle.state_v = 'stopped'
@@ -128,13 +137,13 @@ while True:
     if playing:
         background()
 
-        # black hole
-        black_hole.move(1)
-        black_hole.show()
+        # portal 1
+        portal1.move(1)
+        portal1.show()
 
-        # white hole
-        white_hole.move(2)
-        white_hole.show()
+        # portal 2
+        portal2.move(2)
+        portal2.show()
 
         # ball
         ball.move()
@@ -157,8 +166,8 @@ while True:
             ball.restart_center()
             left_paddle.restart()
             right_paddle.restart()
-            black_hole.restart()
-            white_hole.restart()
+            portal1.restart()
+            portal2.restart()
             playing = False
         if collision.check_goal(ball) == 2:
             background()
@@ -166,25 +175,35 @@ while True:
             ball.restart_center()
             left_paddle.restart()
             right_paddle.restart()
-            black_hole.restart()
-            white_hole.restart()
+            portal1.restart()
+            portal2.restart()
             playing = False
+
+        # checking ball-portal 1 collision:
+        if portal1.activated and collision.collision_ball_portal(ball, portal1):
+            ball.portal_collision(portal2)
+            portal2.activated = False
+
+        # checking ball-portal 2 collision:
+        if portal2.activated and collision.collision_ball_portal(ball, portal2):
+            ball.portal_collision(portal1)
+            portal1.activated = False
 
         # checking ball-paddles collisions
         if collision.collision_ball_paddle1(ball, left_paddle) or collision.collision_ball_paddle2(ball, right_paddle):
             ball.paddle_collision()
+            portal1.activated = True
+            portal2.activated = True
 
         # checking ball-walls
         if collision.collision_ball_walls(ball):
             ball.wall_collision()
 
         # checking holes limit:
-        if collision.check_hole_limit(black_hole):
-            black_hole.limit_collision()
-        if collision.check_hole_limit(white_hole):
-            white_hole.limit_collision()
-
-
+        if collision.check_portal_limit(portal1):
+            portal1.limit_collision()
+        if collision.check_portal_limit(portal2):
+            portal2.limit_collision()
 
     left_score.show()
     right_score.show()

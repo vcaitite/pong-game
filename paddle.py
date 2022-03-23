@@ -36,7 +36,6 @@ class Paddle:
             elif self.state_h == "back" and self.position[0] < WIDTH - 20 - 10:
                 self.position = tuple(map(operator.add, self.position, (20, 0, 0, 0)))
 
-
     def restart(self):
         self.position = self.start_position
         self.state = 'stopped'

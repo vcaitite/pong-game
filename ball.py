@@ -19,7 +19,7 @@ class Ball:
 
     def start_moving(self):
         direction = [-1, 1]
-        self.dx_dy = (direction[random.randint(0, 1)] * 20, direction[random.randint(0, 1)] * random.randint(3, 20))
+        self.dx_dy = (direction[random.randint(0, 1)] * 15, direction[random.randint(0, 1)] * random.randint(3, 20))
 
     def move(self):
         self.position = (self.position[0]+self.dx_dy[0], self.position[1]+self.dx_dy[1])
@@ -29,6 +29,10 @@ class Ball:
 
     def wall_collision(self):
         self.dx_dy = (self.dx_dy[0], -self.dx_dy[1])
+
+    def portal_collision(self, exit_portal):
+        self.position = (exit_portal.portal_rect.centerx, exit_portal.portal_rect.centery)
+        self.dx_dy = (self.dx_dy[0], self.dx_dy[1])
 
     def restart_center(self):
         self.position = (WIDTH//2, HEIGHT//2)
