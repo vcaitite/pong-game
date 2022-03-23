@@ -25,12 +25,12 @@ class Paddle:
 
     def move_h(self, paddle):
         if paddle == 1:
-            if self.state_h == "forward" and self.position[0] < 190 - self.position[2]:
+            if self.state_h == "forward" and self.position[0] < 350 - self.position[2]:
                 self.position = tuple(map(operator.add, self.position, (20, 0, 0, 0)))
             elif self.state_h == "back" and self.position[0] > 10:
                 self.position = tuple(map(operator.add, self.position, (-20, 0, 0, 0)))
         elif paddle == 2:
-            if self.state_h == "forward" and self.position[0] > WIDTH - 190:
+            if self.state_h == "forward" and self.position[0] > WIDTH - 350:
                 self.position = tuple(map(operator.add, self.position, (-20, 0, 0, 0)))
             elif self.state_h == "back" and self.position[0] < WIDTH - 20 - 10:
                 self.position = tuple(map(operator.add, self.position, (20, 0, 0, 0)))
