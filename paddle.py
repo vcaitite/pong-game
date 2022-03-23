@@ -10,6 +10,7 @@ class Paddle:
         self.surface = surface
         self.color = color
         self.position = (x_pos, y_pos, width, height)
+        self.start_position = self.position
         self.state_v = "stopped"
         self.state_h = "stopped"
         self.show()
@@ -20,7 +21,7 @@ class Paddle:
     def move_v(self):
         if self.state_v == "up" and self.position[1] > 0:
             self.position = tuple(map(operator.add, self.position, (0, -15, 0, 0)))
-        elif self.state_v == "down" and self.position[1] < HEIGHT - self.position[3]:
+        elif self.state_v == "down" and self.position[1] < HEIGHT - self.position[3] - 15:
             self.position = tuple(map(operator.add, self.position, (0, 15, 0, 0)))
 
     def move_h(self, paddle):
@@ -37,6 +38,6 @@ class Paddle:
 
 
     def restart(self):
-        self.position = (self.position[0], HEIGHT//2 - self.position[3]//2, self.position[2], self.position[3])
+        self.position = self.start_position
         self.state = 'stopped'
         self.show()

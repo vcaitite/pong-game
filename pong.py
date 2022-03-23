@@ -18,7 +18,7 @@ COLOR_PURPLE = (0x5C, 0x00, 0x7A)
 
 
 # Collecting our screen
-surface = pygame.display.set_mode((WIDTH, HEIGHT))
+surface = pygame.display.set_mode((WIDTH, HEIGHT + 100))
 
 # Customizing our screen
 pygame.display.set_caption("Pong Game")
@@ -40,7 +40,10 @@ def background():
     pygame.draw.circle(surface, COLOR_PURPLE, (WIDTH // 2, HEIGHT // 2), 7, width=7)
     pygame.draw.circle(surface, COLOR_PURPLE, (0, HEIGHT // 2), 200, width=3)
     pygame.draw.circle(surface, COLOR_PURPLE, (WIDTH, HEIGHT // 2), 200, width=3)
-
+    pygame.draw.line(surface, COLOR_PURPLE, (0, 0), (900, 0), width=5)
+    pygame.draw.line(surface, COLOR_PURPLE, (0, 0), (0, 500), width=3)
+    pygame.draw.line(surface, COLOR_PURPLE, (0, 500), (900, 500), width=5)
+    pygame.draw.line(surface, COLOR_PURPLE, (900, 0), (900, 500), width=3)
 
 def restart():
     background()
@@ -58,8 +61,8 @@ ball = ball.Ball(surface, COLOR_WHITE, WIDTH//2, HEIGHT//2, 20)
 left_paddle = paddle.Paddle(surface, COLOR_PURPLE, 10, HEIGHT//2-50, 20, 100)
 right_paddle = paddle.Paddle(surface, COLOR_PURPLE, WIDTH - 20 - 10, HEIGHT//2-50, 20, 100)
 collision = collision.Collision()
-left_score = score.Score(surface, '0', WIDTH//4, 15)
-right_score = score.Score(surface, '0', WIDTH - WIDTH//4, 15)
+left_score = score.Score(surface, '0', WIDTH//4, HEIGHT + 15)
+right_score = score.Score(surface, '0', WIDTH - WIDTH//4, HEIGHT + 15)
 
 # Variables:
 playing = False
