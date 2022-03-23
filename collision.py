@@ -31,3 +31,8 @@ class Collision:
             return 2 # goal of player 2
         return 0
 
+    def check_hole_limit(self, hole):
+        if hole.hole_rect.centerx > 700 or hole.hole_rect.centerx < 200:
+            return True
+        return False
+

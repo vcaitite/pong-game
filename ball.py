@@ -21,7 +21,6 @@ class Ball:
         direction = [-1, 1]
         self.dx_dy = (direction[random.randint(0, 1)] * 20, direction[random.randint(0, 1)] * random.randint(3, 20))
 
-
     def move(self):
         self.position = (self.position[0]+self.dx_dy[0], self.position[1]+self.dx_dy[1])
 

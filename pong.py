@@ -4,6 +4,7 @@ import ball
 import paddle
 import collision
 import score
+import hole
 
 
 # Initialize pygame
@@ -20,11 +21,14 @@ COLOR_PURPLE = (0x5C, 0x00, 0x7A)
 # Collecting our screen
 surface = pygame.display.set_mode((WIDTH, HEIGHT + 100))
 
+
 # Customizing our screen
 pygame.display.set_caption("Pong Game")
 
-# Load Center Image
+# Images
 center_bg = pygame.image.load("resources/images/center.png")
+black_hole_image = pygame.transform.scale(pygame.image.load("resources/images/black_hole.png"), (100, 100))
+white_hole_image = pygame.transform.scale(pygame.image.load("resources/images/white_hole.png"), (100, 100))
 
 def background():
     # Background color
@@ -36,6 +40,7 @@ def background():
 
     # Middle line
     pygame.draw.line(surface, COLOR_PURPLE, (WIDTH // 2, 0), (WIDTH // 2, HEIGHT), 3)
+
     # Field marks
     pygame.draw.circle(surface, COLOR_PURPLE, (WIDTH // 2, HEIGHT // 2), 7, width=7)
     pygame.draw.circle(surface, COLOR_PURPLE, (0, HEIGHT // 2), 200, width=3)
@@ -52,6 +57,8 @@ def restart():
     ball.restart()
     left_paddle.restart()
     right_paddle.restart()
+    black_hole.restart()
+    white_hole.restart()
 
 background()
 
@@ -63,6 +70,9 @@ right_paddle = paddle.Paddle(surface, COLOR_PURPLE, WIDTH - 20 - 10, HEIGHT//2-5
 collision = collision.Collision()
 left_score = score.Score(surface, '0', WIDTH//4, HEIGHT + 15)
 right_score = score.Score(surface, '0', WIDTH - WIDTH//4, HEIGHT + 15)
+black_hole = hole.Hole(surface, black_hole_image, 680, 430)
+white_hole = hole.Hole(surface, white_hole_image, 220, 70)
+
 
 # Variables:
 playing = False
@@ -76,6 +86,8 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_b:
                 ball.start_moving()
+                black_hole.start_moving(10)
+                white_hole.start_moving(10)
                 playing = True
 
             if event.key == pygame.K_w:
@@ -116,6 +128,14 @@ while True:
     if playing:
         background()
 
+        # black hole
+        black_hole.move(1)
+        black_hole.show()
+
+        # white hole
+        white_hole.move(2)
+        white_hole.show()
+
         # ball
         ball.move()
         ball.show()
@@ -137,6 +157,8 @@ while True:
             ball.restart_center()
             left_paddle.restart()
             right_paddle.restart()
+            black_hole.restart()
+            white_hole.restart()
             playing = False
         if collision.check_goal(ball) == 2:
             background()
@@ -144,6 +166,8 @@ while True:
             ball.restart_center()
             left_paddle.restart()
             right_paddle.restart()
+            black_hole.restart()
+            white_hole.restart()
             playing = False
 
         # checking ball-paddles collisions
@@ -153,6 +177,12 @@ while True:
         # checking ball-walls
         if collision.collision_ball_walls(ball):
             ball.wall_collision()
+
+        # checking holes limit:
+        if collision.check_hole_limit(black_hole):
+            black_hole.limit_collision()
+        if collision.check_hole_limit(white_hole):
+            white_hole.limit_collision()
 
 
 
