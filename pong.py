@@ -76,16 +76,28 @@ while True:
                 playing = True
 
             if event.key == pygame.K_w:
-                left_paddle.state = 'up'
+                left_paddle.state_v = 'up'
 
             if event.key == pygame.K_s:
-                left_paddle.state = 'down'
+                left_paddle.state_v = 'down'
+
+            if event.key == pygame.K_d:
+                left_paddle.state_h = 'forward'
+
+            if event.key == pygame.K_a:
+                left_paddle.state_h = 'back'
 
             if event.key == pygame.K_UP:
-                right_paddle.state = 'up'
+                right_paddle.state_v = 'up'
 
             if event.key == pygame.K_DOWN:
-                right_paddle.state = 'down'
+                right_paddle.state_v = 'down'
+
+            if event.key == pygame.K_LEFT:
+                right_paddle.state_h = 'forward'
+
+            if event.key == pygame.K_RIGHT:
+                right_paddle.state_h = 'back'
 
             if event.key == pygame.K_r:
                 restart()
@@ -93,8 +105,10 @@ while True:
 
 
         if event.type == pygame.KEYUP:
-            left_paddle.state = 'stopped'
-            right_paddle.state = 'stopped'
+            left_paddle.state_v = 'stopped'
+            right_paddle.state_v = 'stopped'
+            left_paddle.state_h = 'stopped'
+            right_paddle.state_h = 'stopped'
 
     if playing:
         background()
@@ -104,11 +118,13 @@ while True:
         ball.show()
 
         # left paddle
-        left_paddle.move()
+        left_paddle.move_v()
+        left_paddle.move_h(1)
         left_paddle.show()
 
         # right paddle
-        right_paddle.move()
+        right_paddle.move_v()
+        right_paddle.move_h(2)
         right_paddle.show()
 
         # checking for goals
